@@ -1,0 +1,25 @@
+type project
+title
+    fsfbl
+owners
+    Sean Kell
+authors 
+    Sean Kell
+projectUrl
+    https://github.com/smkell/fsfbl
+iconUrl
+    https://raw.githubusercontent.com/smkell/fsfbl/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/smkell/fsfbl/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    F# fantasy baseball
+summary
+    Fantasy baseball analysis in F#
+description
+    Fantasy baseball analysis in F#
+
+

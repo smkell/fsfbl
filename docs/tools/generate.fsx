@@ -11,17 +11,17 @@
 // (This is the original behaviour of ProjectScaffold prior to multi project support)
 let referenceBinaries = []
 // Web site location for the generated documentation
-let website = "/##ProjectName##"
+let website = "/fsfbl"
 
-let githubLink = "##GitUrl##/##GitHome##/##GitName##"
+let githubLink = "https://github.com/smkell/fsfbl"
 
 // Specify more information about your project
 let info =
-  [ "project-name", "##ProjectName##"
-    "project-author", "##Author##"
-    "project-summary", "##Summary##"
+  [ "project-name", "fsfbl"
+    "project-author", "Sean Kell"
+    "project-summary", "Fantasy baseball analysis in F#"
     "project-github", githubLink
-    "project-nuget", "http://nuget.org/packages/##ProjectName##" ]
+    "project-nuget", "http://nuget.org/packages/fsfbl" ]
 
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below
@@ -43,6 +43,7 @@ let root = website
 #else
 let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../output")
 #endif
+tracefn "Root is %s" root
 
 // Paths with template/source/output locations
 let bin        = __SOURCE_DIRECTORY__ @@ "../../bin"
