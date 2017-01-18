@@ -52,9 +52,68 @@
 </tr>
 </table>
 
+        <h2>Retrosheets grammer</h2>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">id</span> <span class="i">event</span> <span class="o">=</span> <span class="s">&quot;id&quot;</span>, <span class="s">&quot;,&quot;</span>, <span class="i">game</span> <span class="i">id</span>, <span class="s">&quot;\n&quot;</span>
+<span class="i">game</span> <span class="i">id</span> <span class="o">=</span> <span class="i">team</span> <span class="i">code</span>, <span class="i">year</span>, <span class="i">month</span>, <span class="i">day</span>, <span class="i">game</span> <span class="i">number</span>
+<span class="i">team</span> <span class="i">code</span> <span class="o">=</span> <span class="s">&quot;ANA&quot;</span> | <span class="s">&quot;BAL&quot;</span> | <span class="s">&quot;BOS&quot;</span> | <span class="s">&quot;CHA&quot;</span> | <span class="s">&quot;CLE&quot;</span> | <span class="s">&quot;DET&quot;</span> | <span class="s">&quot;HOU&quot;</span> | <span class="s">&quot;KCA&quot;</span> | <span class="s">&quot;MIN&quot;</span> | <span class="s">&quot;NYA&quot;</span> |
+            <span class="s">&quot;OAK&quot;</span> | <span class="s">&quot;SEA&quot;</span> | <span class="s">&quot;TBA&quot;</span> | <span class="s">&quot;TEX&quot;</span> | <span class="s">&quot;TOR&quot;</span> | <span class="s">&quot;ARI&quot;</span> | <span class="s">&quot;ATL&quot;</span> | <span class="s">&quot;CHN&quot;</span> | <span class="s">&quot;CIN&quot;</span> | <span class="s">&quot;COL&quot;</span> |
+            <span class="s">&quot;LAN&quot;</span> | <span class="s">&quot;MIA&quot;</span> | <span class="s">&quot;MIL&quot;</span> | <span class="s">&quot;NYN&quot;</span> | <span class="s">&quot;PHI&quot;</span> | <span class="s">&quot;SDN&quot;</span> | <span class="s">&quot;SFN&quot;</span> | <span class="s">&quot;SLN&quot;</span> | <span class="s">&quot;WAS&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
+  <h2>Nested types and modules</h2>
+  <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="fsfbl-library-event.html">Event</a>
+          </td>
+          <td class="xmldoc"><p>Represents an event in a Retrosheets event log.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsfbl-library-game.html">Game</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsfbl-library-gameid.html">GameId</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsfbl-library-playrecord.html">PlayRecord</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsfbl-library-team.html">Team</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -66,22 +125,250 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            hello num
+            emptyGame 
           </code>
           <div class="tip" id="1">
-            <strong>Signature:</strong> num:&#39;?7162 -&gt; int<br />
-                          <strong>Type parameters:</strong> '?7162          </div>
+            <strong>Signature:</strong> Game<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L16-16" class="github-link">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L121-121" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Returns 42</p>
-<h2>Parameters</h2>
-<ul>
-<li><code>num</code> - whatever</li>
-</ul>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
+            emptyGameId 
+          </code>
+          <div class="tip" id="2">
+            <strong>Signature:</strong> GameId<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L42-42" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
+            parseDataEvent 
+          </code>
+          <div class="tip" id="3">
+            <strong>Signature:</strong> Parser&lt;Event,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L93-93" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses a Data event record.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
+            parseEvent 
+          </code>
+          <div class="tip" id="4">
+            <strong>Signature:</strong> CharStream&lt;unit&gt; -&gt; Reply&lt;Event&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L100-100" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses an event record.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+            parseGame 
+          </code>
+          <div class="tip" id="5">
+            <strong>Signature:</strong> Parser&lt;Game,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L124-124" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses a game from a series of events.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
+            parseGameId 
+          </code>
+          <div class="tip" id="6">
+            <strong>Signature:</strong> Parser&lt;GameId,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L57-57" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+            parseGames 
+          </code>
+          <div class="tip" id="7">
+            <strong>Signature:</strong> Parser&lt;Game list,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L140-140" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
+            parseIdEvent 
+          </code>
+          <div class="tip" id="8">
+            <strong>Signature:</strong> Parser&lt;Event,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L66-66" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses an Id event record.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
+            parseInfoEvent 
+          </code>
+          <div class="tip" id="9">
+            <strong>Signature:</strong> Parser&lt;Event,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L72-72" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses an Info event record.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
+            parseNonIdEvent 
+          </code>
+          <div class="tip" id="10">
+            <strong>Signature:</strong> CharStream&lt;unit&gt; -&gt; Reply&lt;Event&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L108-108" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses an event record.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '11', 11)" onmouseover="showTip(event, '11', 11)">
+            parsePlayEvent 
+          </code>
+          <div class="tip" id="11">
+            <strong>Signature:</strong> Parser&lt;Event,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L82-82" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses a Play event record.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '12', 12)" onmouseover="showTip(event, '12', 12)">
+            parseStartEvent 
+          </code>
+          <div class="tip" id="12">
+            <strong>Signature:</strong> Parser&lt;Event,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L75-75" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses a Start event record.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '13', 13)" onmouseover="showTip(event, '13', 13)">
+            parseVersionEvent 
+          </code>
+          <div class="tip" id="13">
+            <strong>Signature:</strong> Parser&lt;Event,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/smkell/fsfbl/tree/master/src/fsfbl/Library.fs#L69-69" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Parses a Version event record.</p>
 
 
         </td>
