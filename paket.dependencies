@@ -1,6 +1,7 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core redirects: force
+nuget FParsec-Big-Data-Edition
 
 group Build
   source https://nuget.org/api/v2
@@ -16,3 +17,4 @@ group Test
   
   nuget NUnit ~> 2
   nuget NUnit.Runners ~> 2
+  nuget FParsec-Big-Data-Edition
