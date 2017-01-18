@@ -4,7 +4,7 @@
 #r @"..\..\packages\FParsec-Big-Data-Edition\lib\net45\FParsecCS.dll"
 #r @"..\..\packages\FParsec-Big-Data-Edition\lib\net45\FParsec.dll"
 
-#load "Library.fs"
+#load "Retrosheets.fs"
 open System
 open fsfbl
 open FParsec
@@ -158,10 +158,10 @@ data,er,morim002,0
 data,er,rasmc002,30
 id,ANA201604050"
 
-let event = run Library.parseIdEvent exampleGame
+let event = run Retrosheets.parseIdEvent exampleGame
 printfn "%A" event
 
-let game = run Library.parseGame exampleGame
+let game = run Retrosheets.parseGame exampleGame
 printfn "%A" game
 
-let games = run Library.parseGames exampleGame
+let games = run Retrosheets.parseGames exampleGame
