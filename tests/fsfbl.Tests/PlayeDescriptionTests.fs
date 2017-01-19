@@ -46,4 +46,15 @@ let ``Double plays should be correctly handled`` () =
          }; { fielders = [Retrosheets.FirstBaseman]; runner = Retrosheets.Batter} ] });
     ]
     |> runTestCases
+
+[<Test>]
+let ``Correctly parses hits`` () =
+    [
+        (@"S7", Some { Retrosheets.PlayDescription.empty with hit = Some (Retrosheets.Single [ Retrosheets.LeftFielder ] )});
+        (@"S", Some { Retrosheets.PlayDescription.empty with hit = Some (Retrosheets.Single [] )});
+        (@"D7/G5.3-H;2-H;1-H", Some { Retrosheets.PlayDescription.empty with hit = Some (Retrosheets.Double [ Retrosheets.LeftFielder ] )});
+        (@"HR9/F9LS.3-H;1-H", Some { Retrosheets.PlayDescription.empty with hit = Some (Retrosheets.HomeRun [ Retrosheets.RightFielder ] )});
+        (@"H9/F9LS.3-H;1-H", Some { Retrosheets.PlayDescription.empty with hit = Some (Retrosheets.HomeRun [ Retrosheets.RightFielder ] )});
+    ]
+    |> runTestCases
         

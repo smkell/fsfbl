@@ -57,7 +57,12 @@ module ParseEventsTest =
                     playerId = "fowld001";
                     count = "10";
                     pitches = "BX";
-                    description = Retrosheets.PlayDescription.empty
+                    description = 
+                        {
+                            Retrosheets.PlayDescription.empty
+                            with 
+                                hit = Some (Retrosheets.Double [ Retrosheets.RightFielder ])
+                        }
             }
         let expect = Some(Retrosheets.PlayEvent(expectRecord))
         let actual =

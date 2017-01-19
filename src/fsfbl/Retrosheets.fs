@@ -73,14 +73,26 @@ module Retrosheets =
             static member empty =
                 { fielders = []; runner = Unknown }
 
+    /// A type which represents a hit.
+    type Hit =
+        /// Represents a single hit.
+        | Single of Fielder list
+        /// Represents a doube hit.
+        | Double of Fielder list
+        /// Represents a triple hit.
+        | Triple of Fielder list
+        /// Represents a home run hit.
+        | HomeRun of Fielder list
+
     // A type which represents the description of a play.
     type PlayDescription = 
         {
-            outs : Out list
+            outs  : Out list
+            hit   : Hit option
         }
         with 
             static member empty =
-                { outs = [] }
+                { outs = []; hit = None }
 
     type PlayRecord = 
         { 
@@ -195,12 +207,51 @@ module Retrosheets =
     
     /// Parses one or more `Out`s from the input.
     let outs = many1 out
-    
+
+    let someOrEmptyList =
+        function
+        | Some(x) -> x
+        | None    -> []
+
+    /// Parses a `Single` from the input.
+    let single =
+        pchar 'S' >>. (opt fielders |>> someOrEmptyList)
+        |>> Single
+
+    /// Parses a `Double` from the input.
+    let double =
+        pchar 'D' >>. (opt fielders |>> someOrEmptyList)
+        |>> Double
+
+    /// Parses a `Triple` from the input.
+    let triple =
+        pchar 'T' >>. (opt fielders |>> someOrEmptyList)
+        |>> Triple
+
+    /// Parses a `HomeRun` from the input.
+    let homeRun =
+        (pstring "HR" <|> pstring "H")
+        >>. (opt fielders |>> someOrEmptyList)
+        |>> HomeRun
+
+
+    /// Parsesa `Hit` from the input.
+    let hit = choice [ single
+                       double
+                       triple
+                       homeRun ]
+
     /// Parses a `PlayDescription` from the input.
     let playDescription =
-        preturn PlayDescription.empty
-        .>>. outs
-        |>> fun (acc, o) -> { acc with outs = o }
+        let outPlay =
+            preturn PlayDescription.empty
+            .>>. outs |>> fun (acc, o) -> { acc with outs = o }
+        
+        let hitPlay =
+            preturn PlayDescription.empty
+            .>>. hit |>> fun (acc, h) -> { acc with hit = Some h }
+
+        outPlay <|> hitPlay
     
     /// Parses a Play event record.
     let parsePlayEvent : Parser<Event,unit> =
