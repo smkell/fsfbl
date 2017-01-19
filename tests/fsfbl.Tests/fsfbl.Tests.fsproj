@@ -66,6 +66,7 @@
     <Compile Include="Tests.fs" />
     <None Include="paket.references" />
     <Content Include="App.config" />
+    <Compile Include="PlayeDescriptionTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

@@ -165,3 +165,10 @@ let game = run Retrosheets.parseGame exampleGame
 printfn "%A" game
 
 let games = run Retrosheets.parseGames exampleGame
+
+let input = @"play,1,0,fowld001,10,BX,8/F78"
+let play = @"1(B)16(2)63(1)/LTP/L1"
+
+let fielders = run Retrosheets.fielders play
+let outs = run Retrosheets.outs play
+let desc = run Retrosheets.playDescription 

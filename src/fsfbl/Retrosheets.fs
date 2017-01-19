@@ -20,6 +20,68 @@ module Retrosheets =
 
     type Team = Home | Away
 
+    /// A type which represents the valid fielder positions.
+    type Fielder = 
+        | Pitcher
+        | Catcher
+        | FirstBaseman
+        | SecondBaseman
+        | ThirdBaseman
+        | ShortStop
+        | LeftFielder
+        | CenterFielder
+        | RightFielder
+        | Unknown
+        with 
+            /// Returns the `Fielder` type which corresponds with the position code given by `c`.
+            ///
+            /// ## Parameters
+            ///  - `c` - The position code.
+            static member OfChar c =
+                match c with
+                | '1' -> Pitcher
+                | '2' -> Catcher
+                | '3' -> FirstBaseman
+                | '4' -> SecondBaseman
+                | '5' -> ThirdBaseman
+                | '6' -> ShortStop
+                | '7' -> LeftFielder
+                | '8' -> CenterFielder
+                | '9' -> RightFielder
+                | _   -> Unknown
+    
+    /// A type which enumerates the possible base runners.
+    type BaseRunner =
+        | Batter
+        | FirstBase
+        | SecondBase
+        | ThirdBase
+        | Unknown
+        with
+            static member OfChar = 
+                function
+                | 'B' -> Batter
+                | '1' -> FirstBase
+                | '2' -> SecondBase
+                | '3' -> ThirdBase     
+                | _   -> Unknown
+                
+    /// A type which represents an out that occured during a play.
+    type Out = 
+        { fielders: Fielder list; runner: BaseRunner } 
+        with
+            static member empty =
+                { fielders = []; runner = Unknown }
+
+    // A type which represents the description of a play.
+    type PlayDescription = 
+        {
+            outs : Out list
+        }
+        with 
+            static member empty =
+                { outs = [] }
+
     type PlayRecord = 
         { 
             inning : int64
@@ -27,8 +89,10 @@ module Retrosheets =
             playerId : string
             count : string
             pitches : string
-            description : string 
-        }
+            description : PlayDescription 
+        } with
+            static member empty =
+                { inning = 0L; homeOrAway = Away; playerId = ""; count = ""; pitches = ""; description = PlayDescription.empty }
 
     /// Type used to represent a "Start" or "Sub" event's data.
     type StartRecord =
@@ -99,15 +163,54 @@ module Retrosheets =
         .>> restOfLine true
         |>> StartEvent
 
+    /// Parses a `Fielder` from the input.
+    let fielder : Parser<Fielder,unit> = digit |>> Fielder.OfChar
+
+    /// Parses one or more `Fielder`s from the input.
+    let fielders = many1 fielder
+
+    /// Parses a `BaseRunner` from the input.
+    let baseRunner = anyOf "B123" |>> BaseRunner.OfChar
+
+    let runnerOut = between (pchar '(') (pchar ')') baseRunner
+    
+    /// Parses an `Out` from the input.
+    let out =
+        let pickRunnerOut (fielders:Fielder list) runnerOut =
+            match runnerOut with 
+            | Some(br) -> br
+            | None -> match fielders with
+                      | []    -> Unknown
+                      | _::[] -> Batter
+                      | _     -> match List.tryLast fielders with
+                                 | Some(FirstBaseman) -> Batter
+                                 | Some(SecondBaseman) -> FirstBase
+                                 | Some(ThirdBaseman) -> SecondBase
+                                 | Some(Catcher) -> ThirdBase
+                                 | _ -> Unknown
+                      
+
+        fielders .>>. opt runnerOut
+        |>> fun (f, b) -> { fielders = f; runner = pickRunnerOut f b}
+    
+    /// Parses one or more `Out`s from the input.
+    let outs = many1 out
+    
+    /// Parses a `PlayDescription` from the input.
+    let playDescription =
+        preturn PlayDescription.empty
+        .>>. outs
+        |>> fun (acc, o) -> { acc with outs = o }
+    
     /// Parses a Play event record.
     let parsePlayEvent : Parser<Event,unit> =
-        (preturn {inning=0L; homeOrAway = Home; playerId=""; count=""; pitches=""; description=""} .>> pstring "play,")
+        (preturn PlayRecord.empty .>> pstring "play,")
         .>>. (pint64 .>> pstring ",") |>> (fun (a, i) -> {a with inning = i})
         .>>. (pint64 .>> pstring ",") |>> (fun (a, i) -> {a with homeOrAway = if i = 0L then Away else Home})
         .>>. (charsTillString "," true 100) |>> (fun (a, i) -> {a with playerId = i})
         .>>. (charsTillString "," true 100) |>> (fun (a, i) -> {a with count = i})
         .>>. (charsTillString "," true 100) |>> (fun (a, i) -> {a with pitches = i})
-        .>>. (restOfLine true) |>> (fun (a, i) -> {a with description = i})
+        .>>. playDescription |>> (fun (a, i) -> {a with description = i})
         |>> PlayEvent
 
     /// Parses a Data event record.
@@ -140,7 +243,7 @@ module Retrosheets =
         } with
             static member empty =
                 { playerId = ""; playerName = ""; playerTeamId = ""; }
-
+    
     type Game = 
         {
             gameId : GameId
