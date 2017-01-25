@@ -200,7 +200,7 @@ let fakePath = "packages" </> "build" </> "FAKE" </> "tools" </> "FAKE.exe"
 let fakeStartInfo script workingDirectory args fsiargs environmentVars =
     (fun (info: System.Diagnostics.ProcessStartInfo) ->
         info.FileName <- System.IO.Path.GetFullPath fakePath
-        info.Arguments <- sprintf "%s --fsiargs -d:FAKE %s \"%s\"" args fsiargs script
+        info.Arguments <- sprintf "--nocache %s --fsiargs -d:FAKE %s \"%s\"" args fsiargs script
         info.WorkingDirectory <- workingDirectory
         let setVar k v =
             info.EnvironmentVariables.[k] <- v
