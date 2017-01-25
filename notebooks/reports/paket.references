@@ -1,0 +1,7 @@
+FSharp.Core
+
+group notebook
+    FsLab
+    FsLab.Runner
+    Suave
+    FAKE
