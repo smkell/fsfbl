@@ -2,10 +2,10 @@ namespace fsfbl.Tests
 
 module ParseEventsTest =
     open fsfbl
-    open NUnit.Framework
+    open Xunit
     open FParsec
 
-    [<Test>]
+    [<Fact>]
     let ``parseIdEvent successfully parses Id`` () =
       let line = @"id,ANA201604040"
       let expect = Some (fsfbl.Retrosheets.IdEvent {teamCode = "ANA"; year = 2016L; month = 04L; day = 04L; gameNum = 0L})
@@ -14,11 +14,9 @@ module ParseEventsTest =
         | Success(id,_,_) -> Some id
         | _ -> None
 
-      printfn "%A" actual
+      Assert.Equal(expect,actual)
 
-      Assert.AreEqual(expect,actual)
-
-    [<Test>]
+    [<Fact>]
     let ``parseVersionEvent successfully parses version`` () =
       let line = @"version,2"
       let expect = Some (fsfbl.Retrosheets.VersionEvent 2L)
@@ -27,11 +25,9 @@ module ParseEventsTest =
         | Success(id,_,_) -> Some id
         | _ -> None
 
-      printfn "%A" actual
+      Assert.Equal(expect,actual)
 
-      Assert.AreEqual(expect,actual)
-
-    [<Test>]
+    [<Fact>]
     let ``parseInfoEvent successfully parses info key-value pair`` () =
       let line = @"info,visteam,CHN"
       let expect = Some (fsfbl.Retrosheets.InfoEvent ("visteam", "CHN"))
@@ -40,11 +36,9 @@ module ParseEventsTest =
         | Success(id,_,_) -> Some id
         | _ -> None
 
-      printfn "%A" actual
+      Assert.Equal(expect,actual)
 
-      Assert.AreEqual(expect,actual)
-
-    [<Test>]
+    [<Fact>]
     let ``parsePlayEvent successfully parses a play event``() =
         let line = @"play,1,0,fowld001,10,BX,D9/G+"
 
@@ -70,5 +64,4 @@ module ParseEventsTest =
             | Success(e,_,_) -> Some e
             | _ -> None
     
-        printfn "%A" actual
-        Assert.AreEqual(expect, actual)
+        Assert.Equal(expect, actual)

@@ -2,6 +2,8 @@ source https://nuget.org/api/v2
 
 nuget FSharp.Core redirects: force
 nuget FParsec-Big-Data-Edition
+nuget FAKE
+nuget Suave
 
 group Build
   source https://nuget.org/api/v2
@@ -9,12 +11,23 @@ group Build
   nuget SourceLink.Fake
   nuget FAKE
   nuget FSharp.Formatting
+  nuget FsLab
+  nuget FsLab.Runner
 
   github fsharp/FAKE modules/Octokit/Octokit.fsx
 
 group Test
   source https://nuget.org/api/v2
   
+  nuget fsunit.xunit
   nuget NUnit ~> 2
   nuget NUnit.Runners ~> 2
   nuget FParsec-Big-Data-Edition
+  nuget xunit
+  nuget xunit.runner.console
+
+group Notebook
+  source https://nuget.org/api/v2
+
+  nuget FsLab
+  nuget FsLab.Runner

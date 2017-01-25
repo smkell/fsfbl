@@ -1,5 +1,8 @@
 FSharp.Core
+
 group Test
-NUnit
-NUnit.Runners
-FParsec-Big-Data-Edition
+    NUnit
+    NUnit.Runners
+    FParsec-Big-Data-Edition
+    xunit
+    fsunit.xunit

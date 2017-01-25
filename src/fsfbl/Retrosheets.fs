@@ -1,4 +1,4 @@
-namespace fsfbl
+﻿namespace fsfbl
 
 /// Documentation for my library
 ///
@@ -9,11 +9,40 @@ namespace fsfbl
 ///
 /// ## Retrosheets grammer
 ///     
-///     id event = "id", ",", game id, "\n"
-///     game id = team code, year, month, day, game number
-///     team code = "ANA" | "BAL" | "BOS" | "CHA" | "CLE" | "DET" | "HOU" | "KCA" | "MIN" | "NYA" |
+///     digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+///     team code = "ANA" | "BAL" | "BOS" | "CHA" | "CLE" | "DET" | "HOU" | "KCA" | "MIN" | "NYA" | 
 ///                 "OAK" | "SEA" | "TBA" | "TEX" | "TOR" | "ARI" | "ATL" | "CHN" | "CIN" | "COL" |
-///                 "LAN" | "MIA" | "MIL" | "NYN" | "PHI" | "SDN" | "SFN" | "SLN" | "WAS"
+///                 "LAN" | "MIA" | "MIL" | "NYN" | "PHI" | "SDN" | "SFN" | "SLN" | "WAS" ;
+///     year = digit, digit, digit, digit ;
+///     month = digit, digit ;
+///     day = digit, digit ;
+///     game number = digit ;
+///     game id = team code, year, month, day, game number ;
+///     id event = "id", ",", game id, "\n" ;
+///     fielder = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+///     fielders = fielder { fielder } ;
+///     single = "S", { fielders } ;
+///     double = "D", { fielders } ;
+///     triple = "T", { fielders } ;
+///     home run = "H" | "HR", { fielders } ;
+///     hit = single | double | triple | home run ;
+///     base runner = "B" | "1" | "2" | "3" ;
+///     runner out = "(", base runner, ")" ;
+///     out = fielders, { runner out } ;
+///     outs = out, { out } ;
+///     interference = "C/E", fielder ;
+///     ground rule double = "DGR" ;
+///     error = "E", fielder ;
+///     fielders coice = "FC", fielder ;
+///     error on fly ball = "FLE", fielder ;
+///     basic description = hit 
+///                       | outs
+///                       | interference
+///                       | ground rule double
+///                       | error 
+///                       | fielders choice 
+///                       | error on fly ball ;
+///     play event = basic description { modifiers } { runner advances } ;
 module Retrosheets = 
     open FParsec
     open System
@@ -58,6 +87,10 @@ module Retrosheets =
         | ThirdBase
         | Unknown
         with
+            /// Returns the `BaseRunner` type which corresponds with the base runner code given.
+            ///
+            /// ## Parameters
+            ///  - `c` (implicit) - The base runner code.
             static member OfChar = 
                 function
                 | 'B' -> Batter
@@ -84,15 +117,20 @@ module Retrosheets =
         /// Represents a home run hit.
         | HomeRun of Fielder list
 
+    /// A type which represents interference that occured in a play.
+    type Interference =
+        | Interference of Fielder
+
     // A type which represents the description of a play.
     type PlayDescription = 
         {
             outs  : Out list
             hit   : Hit option
+            interference : Interference option
         }
         with 
             static member empty =
-                { outs = []; hit = None }
+                { outs = []; hit = None; interference = None; }
 
     type PlayRecord = 
         { 
@@ -113,11 +151,11 @@ module Retrosheets =
             playerName : string;
             homeOrAway : Team;
             battingOrder : int64;
-            fieldingPosition : int64;
+            fieldingPosition : Fielder;
         } with
             /// An empty StartRecord, useful for constructing new records.
             static member empty =
-                { playerId = ""; playerName = ""; homeOrAway = Away; battingOrder = 0L; fieldingPosition = 0L }
+                { playerId = ""; playerName = ""; homeOrAway = Away; battingOrder = 0L; fieldingPosition = Fielder.Unknown }
 
     type GameId = 
         {
@@ -163,6 +201,9 @@ module Retrosheets =
     /// Parses an Info event record.
     let parseInfoEvent : Parser<Event,unit> = pstring "info," >>. charsTillString "," true 100 .>>. restOfLine true |>> InfoEvent
 
+    /// Parses a `Fielder` from the input.
+    let fielder : Parser<Fielder,unit> = digit |>> Fielder.OfChar
+
     /// Parses a Start event record.
     let parseStartEvent : Parser<Event,unit> = 
         preturn StartRecord.empty
@@ -171,12 +212,9 @@ module Retrosheets =
         .>>. (charsTillString "," true 100) |>> fun (acc, i) -> { acc with playerName = i } 
         .>>. (pint64 .>> pstring "," |>> fun (i) -> if i = 0L then Away else Home) |>> fun (acc, i) -> { acc with homeOrAway = i }
         .>>. (pint64 .>> pstring ",") |>> fun (acc, i) -> { acc with battingOrder = i }
-        .>>. (pint64) |>> fun (acc, i) -> { acc with fieldingPosition = i }
+        .>>. (fielder) |>> fun (acc, i) -> { acc with fieldingPosition = i }
         .>> restOfLine true
         |>> StartEvent
-
-    /// Parses a `Fielder` from the input.
-    let fielder : Parser<Fielder,unit> = digit |>> Fielder.OfChar
 
     /// Parses one or more `Fielder`s from the input.
     let fielders = many1 fielder
@@ -184,6 +222,7 @@ module Retrosheets =
     /// Parses a `BaseRunner` from the input.
     let baseRunner = anyOf "B123" |>> BaseRunner.OfChar
 
+    /// Parses a runner who was put out during a play.
     let runnerOut = between (pchar '(') (pchar ')') baseRunner
     
     /// Parses an `Out` from the input.
@@ -235,11 +274,20 @@ module Retrosheets =
         |>> HomeRun
 
 
-    /// Parsesa `Hit` from the input.
+    /// Parses a `Hit` from the input.
     let hit = choice [ single
                        double
                        triple
                        homeRun ]
+
+    /// Parses an `Interference` from the input.
+    let interference =
+        pstring "C/E" >>. fielder
+        |>> Interference
+
+    let groundRuleDouble : Parser<PlayDescription,unit> =
+            pstring "DGR" >>.
+            preturn { outs = []; hit = None; interference = None; }
 
     /// Parses a `PlayDescription` from the input.
     let playDescription =
@@ -251,7 +299,14 @@ module Retrosheets =
             preturn PlayDescription.empty
             .>>. hit |>> fun (acc, h) -> { acc with hit = Some h }
 
-        outPlay <|> hitPlay
+        let interferencePlay =
+            preturn PlayDescription.empty
+            .>>. interference |>> fun (acc, i) -> { acc with interference = Some i }
+
+        choice [ outPlay
+                 hitPlay
+                 interferencePlay
+                 groundRuleDouble ]
     
     /// Parses a Play event record.
     let parsePlayEvent : Parser<Event,unit> =
@@ -291,10 +346,22 @@ module Retrosheets =
             playerId : string;
             playerName : string;
             playerTeamId : string;
+            fieldPosition : Fielder
         } with
             static member empty =
-                { playerId = ""; playerName = ""; playerTeamId = ""; }
+                { playerId = ""; playerName = ""; playerTeamId = ""; fieldPosition = Fielder.Unknown }
     
+    type GameState = 
+        {
+            inning : int64
+            battingSide : Team
+            fieldingSide : Team
+            fielders : Map<Fielder, string>
+        }
+        with
+            static member empty =
+                { inning = 1L; battingSide = Away; fieldingSide = Home; fielders = Map.empty}
+
     type Game = 
         {
             gameId : GameId
@@ -302,9 +369,53 @@ module Retrosheets =
             homeRoster : Map<string, Player>
             awayTeamId : string
             awayRoster : Map<string, Player>
+            state : GameState
         } with
             static member empty =
-                { gameId = GameId.empty; homeTeamId = ""; homeRoster = Map.empty; awayTeamId = ""; awayRoster = Map.empty }
+                { 
+                    gameId = GameId.empty;
+                    homeTeamId = "";
+                    homeRoster = Map.empty;
+                    awayTeamId = "";
+                    awayRoster = Map.empty;
+                    state = GameState.empty
+                }
+
+            static member addFielder game player team =
+                let game = match team with
+                           | Home -> 
+                                let player = { player with playerTeamId = game.homeTeamId }
+                                { game with homeRoster = game.homeRoster.Add(player.playerId, player) }
+                           | Away -> 
+                                let player = { player with playerTeamId = game.awayTeamId }
+                                { game with homeRoster = game.homeRoster.Add(player.playerId, player) }                    
+                if team = game.state.fieldingSide then
+                    let state = { game.state with fielders = game.state.fielders.Add(player.fieldPosition, player.playerId) }
+                    { game with state = state }
+                else
+                    game             
+                    
+            member game.swapSides inning battingSide =
+                let rec loop (state : GameState) (players: Player list) = 
+                    match players with
+                    | [] -> state
+                    | hd::tl -> 
+                        loop { state with fielders = state.fielders.Add(hd.fieldPosition, hd.playerId) } tl
+                    
+                match game.state.battingSide with
+                | Home -> 
+                    let players = game.homeRoster
+                                  |> Map.toList
+                                  |> List.map (fun (_, p) -> p)
+                    let state = loop game.state players
+                    { game with state = { state with fieldingSide = Away; battingSide = Home } }
+                | Away -> 
+                    let players = game.homeRoster
+                                  |> Map.toList
+                                  |> List.map (fun (_, p) -> p)
+                    let state = loop game.state players
+                    { game with state = { state with fieldingSide = Home; battingSide = Away } }
+                
 
     /// Parses a game from a series of events.
     let parseGame = 
@@ -322,10 +433,19 @@ module Retrosheets =
                     loop {acc with homeTeamId = homeTeamId} tl
                 | StartEvent(startRecord) ->
                     let player = 
-                        { playerId = startRecord.playerId; playerName = startRecord.playerName; playerTeamId = ""; }
-                    match startRecord.homeOrAway with
-                    | Home -> loop { acc with homeRoster = acc.homeRoster.Add(startRecord.playerId, { player with playerTeamId = acc.homeTeamId }) } tl
-                    | Away -> loop { acc with awayRoster = acc.awayRoster.Add(startRecord.playerId, { player with playerTeamId = acc.awayTeamId }) } tl
+                        { 
+                            playerId = startRecord.playerId; 
+                            playerName = startRecord.playerName; 
+                            playerTeamId = ""; 
+                            fieldPosition = startRecord.fieldingPosition 
+                        }
+                      
+                    loop (Game.addFielder acc player startRecord.homeOrAway) tl
+
+                | PlayEvent(playRecord) ->
+                    let newGame =
+                        acc.swapSides playRecord.inning playRecord.homeOrAway
+                    loop newGame tl
                 | _ -> loop acc tl
 
         parseIdEvent .>>. many parseNonIdEvent
