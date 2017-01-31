@@ -6,7 +6,7 @@ nuget FAKE
 
 group Build
   source https://nuget.org/api/v2
-  
+
   nuget SourceLink.Fake
   nuget FAKE
   nuget FSharp.Formatting
@@ -15,17 +15,10 @@ group Build
 
 group Test
   source https://nuget.org/api/v2
-  
+
   nuget fsunit.xunit
   nuget NUnit ~> 2
   nuget NUnit.Runners ~> 2
   nuget FParsec-Big-Data-Edition
   nuget xunit
   nuget xunit.runner.console
-
-group Notebook
-  source https://nuget.org/api/v2
-
-  nuget FAKE
-  nuget FsLab
-  nuget FsLab.Runner

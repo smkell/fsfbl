@@ -6,7 +6,6 @@
 #load "ProjectInfo.fsx"
 #load "BuildTasks.fsx"
 #load "DocsTasks.fsx"
-#load "NotebooksTasks.fsx"
 #load "PublishTasks.fsx"
 #load "TestTasks.fsx"
 
@@ -22,11 +21,11 @@ Target "All" DoNothing
 "Build" ==> "All"
 "Test"  ==> "All"
 "GenerateDocs" ==> "All"
-"PublishNotebooks" ==> "All"
 "BuildPackage" ==> "All"
 
 "All"
   =?> ("ReleaseDocs",isLocalBuild)
+
 "Clean"
   ==> "Release"
 
